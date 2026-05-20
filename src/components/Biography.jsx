@@ -5,7 +5,7 @@ const Biography = () => {
     <>
       <div className="container biography" >
         <div className="banner">
-          <img src="../public/TANGER.png" alt="whoweare" className="tanger-img" />
+          <img src="../public/tanger.png" alt="whoweare" className="tanger-img" />
         
         </div>
         <div className="banner">
