@@ -45,7 +45,7 @@ const MessageForm = () => {
       <div className="container form-mess"  >
      
         <div className="div-img-mess">
-          <img src="../public/send.jpg" alt=""    />
+          <img src="/send.jpg" alt=""    />
         </div>
         
         
