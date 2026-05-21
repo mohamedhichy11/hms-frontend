@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaLinkedin, FaLocationArrow, FaPhone, FaSquareXTwitter } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
+import "./Footer.css";
 import ChatBot from 'react-simple-chatbot';
 const Footer = () => {
 
