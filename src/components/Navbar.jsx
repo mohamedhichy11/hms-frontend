@@ -8,6 +8,7 @@ import { Context } from "../main";
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
+  const navigateTo = useNavigate(); // ✅ move to top
 
   const handleLogout = async () => {
     await axios
@@ -17,20 +18,12 @@ const Navbar = () => {
       .then((res) => {
         toast.success(res.data.message);
         setIsAuthenticated(false);
-       
+        navigateTo("/"); // ✅ inside .then() where it belongs
       })
       .catch((err) => {
         toast.error(err.response.data.message);
       });
-      navigateTo("/")
   };
-
-  const navigateTo = useNavigate();
-
-  const goToLogin = () => {
-    navigateTo("/login");
-  };
-
   return (
     <>
       <nav>
