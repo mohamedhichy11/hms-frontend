@@ -4,12 +4,11 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Context } from "../main";
+import "./Navbar.css";
 
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
-
-  // ✅ Always declare hooks at the top
   const navigateTo = useNavigate();
 
   const handleLogout = async () => {
@@ -19,45 +18,52 @@ const Navbar = () => {
         { withCredentials: true }
       );
       toast.success(res.data.message);
-      setIsAuthenticated(false); // ✅ update state
-      navigateTo("/login");      // ✅ redirect to login
+      setIsAuthenticated(false);
+      navigateTo("/login");
     } catch (err) {
       toast.error(err?.response?.data?.message || "Logout failed");
     }
   };
 
-  const goToLogin = () => {
-    navigateTo("/login");
-  };
-
   return (
-    <>
-      <nav>
-        <div className="logo">
-          <img src="/logo.png" alt="logo" className="logo-img" />
-        </div>
-        <div className={show ? "navLinks showmenu" : "navLinks"}>
-          <div className="links">
-            <Link to={"/"} onClick={() => setShow(false)}>Home</Link>
-            <Link to={"/appointment"} onClick={() => setShow(false)}>Appointment</Link>
-            <Link to={"/about"} onClick={() => setShow(false)}>About Us</Link>
-            {isAuthenticated && <Link to="/profile" onClick={() => setShow(false)}>Profile</Link>}
+    <nav className="navbar">
+      <div className="nav-inner">
+
+        {/* LOGO */}
+        <Link to="/" className="nav-logo">
+          <div className="nav-logo-icon">🏥</div>
+          <div className="nav-logo-text">
+            <span className="nav-logo-title">Tanger Medical</span>
+            <span className="nav-logo-sub">CLINICS</span>
           </div>
-          {isAuthenticated ? (
-            <button className="logoutBtn btn" onClick={handleLogout}>
-              LOGOUT
-            </button>
-          ) : (
-            <button className="loginBtn btn" onClick={goToLogin}>
-              LOGIN
-            </button>
+        </Link>
+
+        {/* LINKS */}
+        <div className={`nav-links ${show ? "show" : ""}`}>
+          <Link to="/" className="nav-link" onClick={() => setShow(false)}>Home</Link>
+          <Link to="/appointment" className="nav-link" onClick={() => setShow(false)}>Appointment</Link>
+          <Link to="/about" className="nav-link" onClick={() => setShow(false)}>About Us</Link>
+          {isAuthenticated && (
+            <Link to="/profile" className="nav-link" onClick={() => setShow(false)}>Profile</Link>
           )}
         </div>
+
+        {/* ACTIONS */}
+        <div className="nav-actions">
+          <span className="nav-badge">● Available 24/7</span>
+          {isAuthenticated ? (
+            <button className="btn-logout" onClick={handleLogout}>Logout</button>
+          ) : (
+            <button className="btn-login" onClick={() => navigateTo("/login")}>Login</button>
+          )}
+        </div>
+
+        {/* HAMBURGER */}
         <div className="hamburger" onClick={() => setShow(!show)}>
           <GiHamburgerMenu />
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 };
 
