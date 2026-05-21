@@ -6,6 +6,7 @@ import MessageForm from '../components/MessageForm'
 // import Trailer from '../components/Trailer'
 import Heurs from '../components/heurs'
 import Galerie from '../components/Galerie'
+import "../components/Home.css"; 
 
 
 
