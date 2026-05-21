@@ -8,26 +8,24 @@ import { Context } from "../main";
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
-  
-  // ✅ Always declare hooks at the TOP
+
+  // ✅ Always declare hooks at the top
   const navigateTo = useNavigate();
 
   const handleLogout = async () => {
-    await axios
-      .get(`${import.meta.env.VITE_API_URL}/api/v1/user/patient/logout`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        toast.success(res.data.message);
-        setIsAuthenticated(false);
-        navigateTo("/"); // ✅ inside .then()
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/v1/user/patient/logout`,
+        { withCredentials: true }
+      );
+      toast.success(res.data.message);
+      setIsAuthenticated(false); // ✅ update state
+      navigateTo("/login");      // ✅ redirect to login
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Logout failed");
+    }
   };
 
-  // ✅ now goToLogin is defined before JSX uses it
   const goToLogin = () => {
     navigateTo("/login");
   };
@@ -40,17 +38,15 @@ const Navbar = () => {
         </div>
         <div className={show ? "navLinks showmenu" : "navLinks"}>
           <div className="links">
-            <Link to={"/"} onClick={() => setShow(!show)}>Home</Link>
-            <Link to={"/appointment"} onClick={() => setShow(!show)}>Appointment</Link>
-            <Link to={"/about"} onClick={() => setShow(!show)}>About Us</Link>
-            {isAuthenticated ? <Link to="/profile">Profile</Link> : ""}
+            <Link to={"/"} onClick={() => setShow(false)}>Home</Link>
+            <Link to={"/appointment"} onClick={() => setShow(false)}>Appointment</Link>
+            <Link to={"/about"} onClick={() => setShow(false)}>About Us</Link>
+            {isAuthenticated && <Link to="/profile" onClick={() => setShow(false)}>Profile</Link>}
           </div>
           {isAuthenticated ? (
-            <div>
-              <button className="logoutBtn btn" onClick={handleLogout}>
-                LOGOUT
-              </button>
-            </div>
+            <button className="logoutBtn btn" onClick={handleLogout}>
+              LOGOUT
+            </button>
           ) : (
             <button className="loginBtn btn" onClick={goToLogin}>
               LOGIN
