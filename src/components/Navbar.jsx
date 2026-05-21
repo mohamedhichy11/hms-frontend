@@ -8,7 +8,9 @@ import { Context } from "../main";
 const Navbar = () => {
   const [show, setShow] = useState(false);
   const { isAuthenticated, setIsAuthenticated } = useContext(Context);
-  const navigateTo = useNavigate(); // ✅ move to top
+  
+  // ✅ Always declare hooks at the TOP
+  const navigateTo = useNavigate();
 
   const handleLogout = async () => {
     await axios
@@ -18,12 +20,18 @@ const Navbar = () => {
       .then((res) => {
         toast.success(res.data.message);
         setIsAuthenticated(false);
-        navigateTo("/"); // ✅ inside .then() where it belongs
+        navigateTo("/"); // ✅ inside .then()
       })
       .catch((err) => {
         toast.error(err.response.data.message);
       });
   };
+
+  // ✅ now goToLogin is defined before JSX uses it
+  const goToLogin = () => {
+    navigateTo("/login");
+  };
+
   return (
     <>
       <nav>
@@ -32,24 +40,16 @@ const Navbar = () => {
         </div>
         <div className={show ? "navLinks showmenu" : "navLinks"}>
           <div className="links">
-            <Link to={"/"} onClick={() => setShow(!show)}>
-              Home
-            </Link>
-            <Link to={"/appointment"} onClick={() => setShow(!show)}>
-              Appointment
-            </Link>
-            <Link to={"/about"} onClick={() => setShow(!show)}>
-              About Us
-            </Link>
-            {isAuthenticated ? (  <Link to="/profile" >Profile</Link>):""}
+            <Link to={"/"} onClick={() => setShow(!show)}>Home</Link>
+            <Link to={"/appointment"} onClick={() => setShow(!show)}>Appointment</Link>
+            <Link to={"/about"} onClick={() => setShow(!show)}>About Us</Link>
+            {isAuthenticated ? <Link to="/profile">Profile</Link> : ""}
           </div>
           {isAuthenticated ? (
-            
             <div>
               <button className="logoutBtn btn" onClick={handleLogout}>
-              LOGOUT
-            </button>
-          
+                LOGOUT
+              </button>
             </div>
           ) : (
             <button className="loginBtn btn" onClick={goToLogin}>
